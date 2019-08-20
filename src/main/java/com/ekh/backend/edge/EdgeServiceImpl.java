@@ -1,4 +1,21 @@
 package com.ekh.backend.edge;
 
-public class EdgeServiceImpl {
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
+
+@Service
+public class EdgeServiceImpl implements EdgeService {
+    @Async
+    @Override
+    public CompletableFuture<List<Edge>> getAllBlogInformation() {
+        List<Edge> blogInformation = new ArrayList<>();
+        for (int i = 0; i < 10; i++) {
+            blogInformation.add(new Edge());
+        }
+        return CompletableFuture.completedFuture(blogInformation);
+    }
 }
