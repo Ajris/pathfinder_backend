@@ -7,7 +7,7 @@ group 'com.ehk.backend'
 version '1.0-SNAPSHOT'
 
 description = 'Pathfinder'
-sourceCompatibility = '12'
+sourceCompatibility = '11'
 
 repositories {
     mavenLocal()
