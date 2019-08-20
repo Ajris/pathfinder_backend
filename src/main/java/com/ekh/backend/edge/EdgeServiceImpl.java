@@ -1,7 +1,9 @@
 package com.ekh.backend.edge;
 
+import com.ekh.backend.exception.ResourceNotFoundException;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,5 +27,18 @@ public class EdgeServiceImpl implements EdgeService {
         Edge added = new Edge();
         blogInformation.add(added);
         return CompletableFuture.completedFuture(added);
+    }
+    @Async
+    @Override
+    public CompletableFuture<Edge> modifyEdge(Edge edge) throws ResourceNotFoundException {
+//        blogInformation.stream()
+//                .filter(x -> x.getId())
+        int modifiedIdx = blogInformation.indexOf(edge);
+        if (modifiedIdx != -1) {
+            blogInformation.set(modifiedIdx, edge);
+            return CompletableFuture.completedFuture(edge);
+        } else {
+            throw new ResourceNotFoundException();
+        }
     }
 }

@@ -1,5 +1,6 @@
 package com.ekh.backend.edge;
 
+import com.ekh.backend.exception.ResourceNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,16 +19,24 @@ class EdgeController {
         this.edgeService = edgeService;
     }
 
-    @CrossOrigin
     @GetMapping
     public ResponseEntity<List<Edge>> getBlogInformation() {
         return new ResponseEntity<>(edgeService.getAllBlogInformation().join(), HttpStatus.ACCEPTED);
     }
 
-    @CrossOrigin
     @PostMapping
     public ResponseEntity<Edge> addEdgeRequest() {
         return new ResponseEntity<>(edgeService.addEdge().join(), HttpStatus.CREATED);
     }
 
+    @PutMapping
+    public ResponseEntity<Edge> modifyEdgeRequest(
+            @RequestBody Edge edge) {
+        try {
+            Edge modifiedEdge = edgeService.modifyEdge(edge).join();
+            return new ResponseEntity<>(modifiedEdge, HttpStatus.OK);
+        } catch (ResourceNotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
+    }
 }
