@@ -1,12 +1,12 @@
 package com.ekh.backend.edge;
 
-import com.ekh.backend.exception.ResourceNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("api/edge")
@@ -31,12 +31,14 @@ class EdgeController {
 
     @PutMapping
     public ResponseEntity<Edge> modifyEdgeRequest(
-            @RequestBody Edge edge) {
+            @RequestBody Edge e) {
         try {
-            Edge modifiedEdge = edgeService.modifyEdge(edge).join();
+            Edge modifiedEdge = edgeService.modifyEdge(e.getId(), e.getName()).join();
             return new ResponseEntity<>(modifiedEdge, HttpStatus.OK);
-        } catch (ResourceNotFoundException e) {
+        } catch (NoSuchElementException ex) {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
+        } catch (IllegalStateException ex) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }
